@@ -4,6 +4,8 @@ import (
 	"math/rand"
 )
 
+type mutFunc func(Image, *rand.Rand)
+
 func (p Image) MutatePoint(rng *rand.Rand) {
 
 	i := rng.Intn(len(p))

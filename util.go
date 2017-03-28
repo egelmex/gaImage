@@ -3,7 +3,10 @@ package main
 import (
 	"fmt"
 	"image"
+	"image/draw"
+	"log"
 	"math"
+	"os"
 )
 
 // Convert a slice of Interfaces to a slice of Points.
@@ -41,4 +44,21 @@ func FastCompare(img1, img2 *image.RGBA) (float64, error) {
 func sqDiffUInt8(x, y uint8) float64 {
 	d := float64(x) - float64(y)
 	return d * d
+}
+
+func loadImage(path string) *image.RGBA {
+	reader, err := os.Open(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer reader.Close()
+	i, _, err := image.Decode(reader)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	result := image.NewRGBA(i.Bounds())
+	draw.Draw(result, i.Bounds(), i, image.ZP, draw.Src)
+
+	return result
 }
